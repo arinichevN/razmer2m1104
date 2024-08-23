@@ -1,12 +1,10 @@
 #include "interface.h"
 
-#ifdef MODE_TEST
-#include <stdio.h>
-#endif
 #include "../Arduino.h"
 #include "../connection.h"
 #include "../coop_t/interface.h"
 #include "../Ton/interface.h"
+#include "../serial/interface.h"
 
 #define BUSY_TIMEOUT_US				1700
 
@@ -49,39 +47,26 @@ static coop_t writeData_GET_NEXT_SIGN(Buffer *buffer){
 
 static coop_t writeData_WRITE_START_SIGN(Buffer *buffer){
 	wsign = CONNECTION_PACKAGE_DELIMITER_START;
-#ifdef MODE_TEST
-	printf("%c", wsign);
-#else
 	if(serial_writeByte(&wsign) != RESULT_SUCCESS){
 		return PROCEED;
 	}
-#endif
 	writeData = writeData_GET_NEXT_SIGN;
 	return PROCEED;
 }
 
 static coop_t writeData_WRITE_SIGNS(Buffer *buffer){
-#ifdef MODE_TEST
-	printf("%hhd.", wsign);
-	//printf("%.2hhd.", wsign);
-#else
 	if(serial_writeByte(&wsign) != RESULT_SUCCESS){
 		return PROCEED;
 	}
-#endif
 	writeData = writeData_GET_NEXT_SIGN;
 	return PROCEED;
 }
 
 static coop_t writeData_WRITE_STOP_SIGN(Buffer *buffer){
 	wsign = CONNECTION_PACKAGE_DELIMITER_STOP;
-#ifdef MODE_TEST
-	printf("%c\n", wsign);
-#else
 	if(serial_writeByte(&wsign) != RESULT_SUCCESS){
 		return PROCEED;
 	}
-#endif
 	buffer_unlockForReading(buffer);
 	writeData = writeData_WAIT_DATA;
 	return YIELD;

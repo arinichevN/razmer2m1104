@@ -10,7 +10,7 @@ MODE=-DMODE_TEST
 GCC_OPTIONS="-Wall -pedantic -g"
 THIS_DIR=$(pwd)
 
-modules=(app ArduinoLinux asciiBcd Buffer BufferBlock bufferBlockMode_t coop_t debug gpio reader result_t signals stime_t time TBuffer tcode Ton viv_t writer yn_t)
+modules=(app ArduinoLinux asciiBcd Buffer BufferBlock bufferBlockMode_t coop_t debug gpio reader result_t serial signals stime_t time TBuffer tcode Ton viv_t writer yn_t)
 
 function buildModule {
 	cd $1 &&
