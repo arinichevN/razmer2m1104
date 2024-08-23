@@ -2,6 +2,7 @@
 #include "../asciiBcd/interface.h"
 #include "../tcode/interface.h"
 #include "../viv_t/interface.h"
+#include "../razmer2m1104.h"
 
 int tbuffer_getCount(TBuffer *self){
 	return RAZMER2M_SIGNS_COUNT;
@@ -20,7 +21,7 @@ void tbuffer_reset(TBuffer *self){
 		}
 	}
 	for(int i=RAZMER2M_SIGNS_COUNT - 4; i<RAZMER2M_SIGNS_COUNT; i++){
-		self->items[i] = asciiToBcd('+');
+		self->items[i] = RAZMER2M_CODE_PLUS;
 	}
 	self->error_index = 0;
 }
@@ -42,9 +43,9 @@ void tbuffer_changeData(TBuffer *self){
 	for(int i=RAZMER2M_SIGNS_COUNT - 4; i<RAZMER2M_SIGNS_COUNT; i++){
 		uint8_t v0 = self->items[i];
 		uint8_t v1 = tcode_getSign(v0);
-		uint8_t v2 = asciiToBcd('+');
-		if(v1 == asciiToBcd('+')){
-			v2 = asciiToBcd('-');
+		uint8_t v2 = RAZMER2M_CODE_PLUS;
+		if(v1 == RAZMER2M_CODE_PLUS){
+			v2 = RAZMER2M_CODE_MINUS;
 		}
 		if(tcode_getError(v0) == YES){
 			tcode_setError(&v2);

@@ -4,13 +4,27 @@
 
 #ifdef MODE_TEST
 #include <stdio.h>
+#include "../connection.h"
+#include "../tcode/interface.h"
 void serial_begin(int baud_rate, int config){
 	;
 }
 
+static char byteToChar(uint8_t vr){
+	uint8_t v = tcode_getSign(vr);
+	if(v >= 0 && v <=9){
+		return '0' + v;
+	}
+	if(v == CONNECTION_PACKAGE_DELIMITER_START || v == CONNECTION_PACKAGE_DELIMITER_STOP){
+		return v;
+	}
+	return '?';
+}
+
 result_t serial_writeByte(void *v){
-	char *pc = v;
-	printf("%c\n", *pc);
+	uint8_t *vb = v;
+	char pc = byteToChar(*vb);
+	printf("%c", pc);
 	return RESULT_SUCCESS;
 }
 #else
